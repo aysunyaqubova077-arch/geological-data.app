@@ -1,4 +1,6 @@
-import streamlit as st import pandas as pd import plotly.graph_objects as go
+import streamlit as st 
+import pandas as pd
+import plotly.graph_objects as go
 lithology_options = ["Qumdaşı", "Əhəngdaşı", "Aleurolit", "Dolomit", "Çınqıl", "Gil", "Mergel"]
 st.title("Geoloji Model - 3D Vizualizasiya")
 st.sidebar.header("Parametrlər və Lay Tənzimləmələri") num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3)
