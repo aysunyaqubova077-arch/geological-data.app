@@ -2,6 +2,18 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+# Səhifənin başlığı və əsas tənzimləmələri
+st.set_page_config(
+    page_title="3D Geoloji Modelləşdirmə - Aysun Yaqubzadə",
+    page_layout="wide"
+)
+
+# Müəllif və layihə məlumatı
+st.title("Geoloji Model - 3D Interaktiv Litologiya")
+st.markdown("### 👩‍💻 Hazırladı: Aysun Yaqubzadə | ADNSU Magistr Tələbəsi")
+st.markdown("Quyuların kəsilişləri əsasında layların 3D geoloji modelini interaktiv şəkildə qurmaq və vizuallaşdırmaq üçün nəzərdə tutulmuş elmi-təhsil məqsədli onlayn hesablama vasitəsi.")
+st.markdown("---")
+
 lithology_styles = {
     "Qumdaşı": {"color": "#e69c24"},
     "Əhəngdaşı": {"color": "#32a852"},
@@ -10,10 +22,6 @@ lithology_styles = {
     "Gil": {"color": "#326fa8"},
     "Mərgel": {"color": "#a83232"}
 }
-
-st.title("Geoloji Model - 3D Interaktiv Litologiya")
-st.markdown("👩‍💻 **Hazırladı:** Aysun Yaqubzadə")
-st.markdown("---")
 
 st.sidebar.header("Parametrlər")
 num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3, key="num_layers_slider")
@@ -85,3 +93,4 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig)
+
