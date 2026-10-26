@@ -17,9 +17,9 @@ for i in range(num_layers):
     lithology = st.selectbox(f"Lay {i+1} Litologiyası", lithology_options)
     
     if i == 0:
-    thickness = depth
+        thickness = depth
 else:
-    thickness = depth - layer_data[i-1]["Dərinlik"]
+        thickness = depth - layer_data[i-1]["Dərinlik"]
     
     layer_data.append({
         "Lay": name, 
