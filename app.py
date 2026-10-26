@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
-# Litologiya növləri və onlara uyğun vizual naxış/rəng təyinləri
 lithology_styles = {
     "Qumdaşı": {"color": "#e69c24", "pattern": "Diamonds"},
     "Əhəngdaşı": {"color": "#32a852", "pattern": "Bricks"},
@@ -15,20 +14,17 @@ lithology_styles = {
 st.title("Geoloji Model - 3D Interaktiv Litologiya")
 
 st.sidebar.header("Parametrlər")
-num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3)
+num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3, key="num_layers_slider")
 
 layer_data = []
+previous_depth = 0.0
+
 for i in range(num_layers):
-    name = st.sidebar.text_input(f"Lay {i+1} Adı", value=f"Lay {i+1}")
-    depth = st.sidebar.number_input(f"Lay {i+1} alt dərinliyi (m)", value=float((i+1)*100))
-    lithology = st.sidebar.selectbox(f"Lay {i+1} Litologiyası", list(lithology_styles.keys()))
+    name = st.sidebar.text_input(f"Lay {i+1} Adı", value=f"Lay {i+1}", key=f"name_{i}")
+    depth = st.sidebar.number_input(f"Lay {i+1} alt dərinliyi (m)", min_value=0.0, step=10.0, value=float((i+1)*100), key=f"depth_{i}")
+    lithology = st.sidebar.selectbox(f"Lay {i+1} Litologiyası", list(lithology_styles.keys()), key=f"litho_{i}")
     
-    # Avtomatik qalınlıq hesabı
-    if i == 0:
-        thickness = depth
-    else:
-        thickness = depth - layer_data[i-1]["Dərinlik"]
-        
+    thickness = depth - previous_depth
     style = lithology_styles[lithology]
     
     layer_data.append({
@@ -39,11 +35,13 @@ for i in range(num_layers):
         "Rəng": style["color"],
         "Tekstur": style["pattern"]
     })
+    
+    previous_depth = depth
 
 df = pd.DataFrame(layer_data)
 
 st.subheader("Daxil edilmiş lay məlumatları")
-st.data_editor(df)
+st.data_editor(df, use_container_width=True)
 
 csv_data = df.to_csv(index=False).encode('utf-8')
 st.download_button(
@@ -55,12 +53,10 @@ st.download_button(
 
 fig = go.Figure()
 
-# Hər lay üçün 3D qutu (blok) modelinin qurulması
 for i, row in df.iterrows():
-    top_depth = 0 if i == 0 else df.loc[i-1, "Dərinlik"]
+    top_depth = 0.0 if i == 0 else df.loc[i-1, "Dərinlik"]
     bottom_depth = row["Dərinlik"]
     
-    # Dördbucaqlı prizma koordinatları
     x_coords = [0, 100, 100, 0, 0, 0, 100, 100, 0, 0]
     y_coords = [0, 0, 100, 100, 0, 0, 0, 100, 100, 0]
     z_coords = [-top_depth, -top_depth, -top_depth, -top_depth, -top_depth, 
