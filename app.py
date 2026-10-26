@@ -2,10 +2,17 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+# Səhifənin başlığı və əsas tənzimləmələri
 st.set_page_config(
-    page_title="3D Geoloji Modelləşdirmə",
+    page_title="3D Geoloji Modelləşdirmə - Aysun Yaqubzadə",
     page_layout="wide"
 )
+
+# Müəllif və layihə məlumatı
+st.title("Geoloji Model - 3D Interaktiv Litologiya")
+st.markdown("### 👩‍💻 Hazırladı: Aysun Yaqubzadə | ADNSU Magistr Tələbəsi")
+st.markdown("Quyuların kəsilişləri əsasında layların 3D geoloji modelini interaktiv şəkildə qurmaq və vizuallaşdırmaq üçün nəzərdə tutulmuş elmi-təhsil məqsədli onlayn hesablama vasitəsi.")
+st.markdown("---")
 
 lithology_styles = {
     "Qumdaşı": {"color": "#e69c24"},
@@ -16,10 +23,7 @@ lithology_styles = {
     "Mərgel": {"color": "#a83232"}
 }
 
-st.title("Geoloji Model - 3D Interaktiv Litologiya")
-st.markdown("### 👩‍💻 Hazırladı: Aysun Yaqubzadə")
-st.markdown("---")
-
+st.sidebar.header("Parametrlər")
 num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3, key="num_layers_slider")
 
 layer_data = []
@@ -29,6 +33,7 @@ for i in range(num_layers):
     depth = st.sidebar.number_input(f"Lay {i+1} alt dərinliyi (m)", min_value=0.0, step=10.0, value=float((i+1)*100), key=f"depth_{i}")
     lithology = st.sidebar.selectbox(f"Lay {i+1} Litologiyası", list(lithology_styles.keys()), key=f"litho_{i}")
     
+    # Qalınlığın avtomatik hesabı
     if i == 0:
         thickness = depth
     else:
