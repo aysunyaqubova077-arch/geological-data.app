@@ -16,8 +16,10 @@ for i in range(num_layers):
     color = st.sidebar.color_picker(f"Lay {i+1} rəngi", value="#1f77b4" if i==0 else "#ff7f0e")
     lithology = st.selectbox(f"Lay {i+1} Litologiyası", lithology_options)
     
-    prev_depth = 0 if i == 0 else layer_data[i-1]["Dərinlik"]
-    thickness = depth - prev_depth
+    if i == 0:
+    thickness = depth
+else:
+    thickness = depth - layer_data[i-1]["Dərinlik"]
     
     layer_data.append({
         "Lay": name, 
