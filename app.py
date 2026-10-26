@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-lithology_options=Qumdaşı,Əhəngdaşı,Alevrit,Alevrolit,Gil,Dolomit,Mergel,Çınqıl
+lithology_options = ["Qumdaşı", "Əhəngdaşı", "Aleurolit", "Dolomit", "Çınqıl", "Gil", "Mergel"]
 st.title("Geoloji Model - 3D Vizuallaşdırma")
 
 st.sidebar.header("Parametrlər və Lay Tənzimləmələri")
