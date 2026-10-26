@@ -10,23 +10,25 @@ st.sidebar.header("Parametrlər və Lay Tənzimləmələri")
 num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3)
 
 layer_data = []
-for i in range(num_layers):
-    name = st.sidebar.text_input(f"Lay {i+1} Adı", value=f"Lay {i+1}")
-    depth = st.sidebar.number_input(f"Lay {i+1} dərinliyi (m)", value=float((i+1)*100))
-    color = st.sidebar.color_picker(f"Lay {i+1} rəngi", value="#1f77b4" if i==0 else "#ff7f0e")
-    lithology = st.selectbox(f"Lay {i+1} Litologiyası", lithology_options)
-    
-    if i == 0:
-        thickness = depth
-else:
-        thickness = depth - layer_data[i-1]["Dərinlik"]
-    
-    layer_data.append({
-        "Lay": name, 
-        "Dərinlik": depth, 
-        "Qalınlıq (m)": thickness, 
-        "Litologiya": lithology, 
-        "Rəng": color
+    for i in range(num_layers):
+        name = st.sidebar.text_input(f"Lay {i+1} Adı", value=f"Lay {i+1}")
+        depth = st.sidebar.number_input(f"Lay {i+1} dərinliyi (m)", value=float((i+1)*100))
+        color = st.sidebar.color_picker(f"Lay {i+1} rəngi", value="#1f77b4" if i==0 else "#ff7f0e")
+        lithology = st.selectbox(f"Lay {i+1} Litologiyası", lithology_options)
+        
+        if i == 0:
+            thickness = depth
+        else:
+            thickness = depth - layer_data[i-1]["Dərinlik"]
+            
+        layer_data.append({
+            "Lay": name,
+            "Dərinlik": depth,
+            "Qalınlıq (m)": thickness,
+            "Litologiya": lithology,
+            "Rəng": color
+        })
+
     })
 
 st.markdown("---")
