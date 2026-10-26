@@ -16,7 +16,7 @@ for i in range(num_layers):
 
 df = pd.DataFrame(layer_data)
 st.subheader("Daxil edilmiş lay məlumatları:")
-st.dataframe(df)
+st.data_editor(df)
 
 fig = go.Figure()
 
