@@ -3,28 +3,34 @@ import pandas as pd
 import plotly.graph_objects as go
 
 lithology_styles = {
-    "Qumdaşı": {"color": "#e69c24", "pattern": "Diamonds"},
-    "Əhəngdaşı": {"color": "#32a852", "pattern": "Bricks"},
-    "Aleurolit": {"color": "#a8a232", "pattern": "Scattered Dots"},
-    "Dolomit": {"color": "#32a89e", "pattern": "Lines"},
-    "Gil": {"color": "#326fa8", "pattern": "Dense dots"},
-    "Mərgel": {"color": "#a83232", "pattern": "Grid"}
+    "Qumdaşı": {"color": "#e69c24"},
+    "Əhəngdaşı": {"color": "#32a852"},
+    "Aleurolit": {"color": "#a8a232"},
+    "Dolomit": {"color": "#32a89e"},
+    "Gil": {"color": "#326fa8"},
+    "Mərgel": {"color": "#a83232"}
 }
 
 st.title("Geoloji Model - 3D Interaktiv Litologiya")
+st.markdown("👩‍💻 **Hazırladı:** Aysun Yaqubzadə")
+st.markdown("---")
 
 st.sidebar.header("Parametrlər")
 num_layers = st.sidebar.slider("Layların sayı", 1, 10, 3, key="num_layers_slider")
 
 layer_data = []
-previous_depth = 0.0
 
 for i in range(num_layers):
     name = st.sidebar.text_input(f"Lay {i+1} Adı", value=f"Lay {i+1}", key=f"name_{i}")
     depth = st.sidebar.number_input(f"Lay {i+1} alt dərinliyi (m)", min_value=0.0, step=10.0, value=float((i+1)*100), key=f"depth_{i}")
     lithology = st.sidebar.selectbox(f"Lay {i+1} Litologiyası", list(lithology_styles.keys()), key=f"litho_{i}")
     
-    thickness = depth - previous_depth
+    # Qalınlığın avtomatik hesabı
+    if i == 0:
+        thickness = depth
+    else:
+        thickness = depth - layer_data[i-1]["Dərinlik"]
+        
     style = lithology_styles[lithology]
     
     layer_data.append({
@@ -32,16 +38,13 @@ for i in range(num_layers):
         "Dərinlik": depth,
         "Qalınlıq (m)": thickness,
         "Litologiya": lithology,
-        "Rəng": style["color"],
-        "Tekstur": style["pattern"]
+        "Rəng": style["color"]
     })
-    
-    previous_depth = depth
 
 df = pd.DataFrame(layer_data)
 
 st.subheader("Daxil edilmiş lay məlumatları")
-st.data_editor(df, use_container_width=True)
+st.dataframe(df, use_container_width=True)
 
 csv_data = df.to_csv(index=False).encode('utf-8')
 st.download_button(
@@ -82,6 +85,3 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig)
-
-
-
